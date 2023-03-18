@@ -1,0 +1,16 @@
+{
+  "name": "electron-study",
+  "version": "1.0.0",
+  "description": "electron project",
+  "main": "main.js",
+  "scripts": {
+    "start": "nodemon --exec electron ."
+  },
+  "keywords": [],
+  "author": "dan",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^23.1.4",
+    "nodemon": "^2.0.21"
+  }
+}
