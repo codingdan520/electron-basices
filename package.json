@@ -1,7 +1,7 @@
 {
   "name": "electron-study",
   "version": "1.0.0",
-  "description": "electron projec",
+  "description": "electron project",
   "main": "main.js",
   "scripts": {
     "start": "nodemon --exec electron ."
