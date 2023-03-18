@@ -1,7 +1,7 @@
 const button = document.querySelector('#sendInfo');
+const box = document.querySelector('.app');
 
 button.addEventListener('click', async () => {
-    console.log('向主进程传递消息');
-    const text = document.querySelector('.app').innerHTML;
-    window.electronAPI.sendMainInfo(text);
+    const res = await window.electronAPI.sendMainInfo();
+    box.innerHTML = res;
 })

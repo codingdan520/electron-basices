@@ -9,7 +9,7 @@ const path = require('path');
 const createWindow = () => {
     const win = new BrowserWindow({
         width: 1200,
-        height: 800,
+        height: 600,
         webPreferences: {
             // 渲染进程预加载
             preload: path.resolve(__dirname, './preload.js')
@@ -23,9 +23,20 @@ const createWindow = () => {
     win.webContents.openDevTools();
 }
 
+// mock 一个接口
+function getInfo() {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve('主进程传递的数据');
+        }, 1000)
+    })
+}
+
 // 主进程监听渲染进程传递过来的回调函数
-ipcMain.handle('render-info', (event, msg) => {
-    console.log(msg);
+ipcMain.handle('render-info', async (event, msg) => {
+    // console.log(msg);
+    return await getInfo();
+    
 })
 
 // app.whenReady表示主进程加载完成，返回一个promise 
