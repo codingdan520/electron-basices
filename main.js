@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, globalShortcut } = require('electron');
 
 // 禁用当前应用程序的硬件加速, 注释此行会在vscode控制台启动硬件加速
 app.disableHardwareAcceleration();
@@ -37,10 +37,20 @@ ipcMain.handle('render-info', (event) => {
 // app.whenReady表示主进程加载完成，返回一个promise 
 app.whenReady().then(() => {
     createWindow();
+    const accelerator = globalShortcut.register('commandOrControl+B', () => {
+        console.log('CommandOrControl+B');
+    })
+    console.log(accelerator);
+    console.log(globalShortcut.isRegistered('CommandOrControl+B'));
     app.on('activate', () => {
         // 此处解决mac系统关闭app后，但程序坞中还存在图标，再次点击可以重新创建进程
         if(BrowserWindow.getAllWindows.length === 0) createWindow();
     })
+})
+
+app.on('will-quit', () => {
+    const register =  globalShortcut.unregister('CommandOrControl+B');
+    console.log(register);
 })
 
 // 关闭所有窗口
