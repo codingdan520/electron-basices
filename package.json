@@ -4,7 +4,7 @@
   "description": "electron project",
   "main": "main.js",
   "scripts": {
-    "start": "nodemon --exec electron ."
+    "start": "chcp 65001 & nodemon --exec electron . --watch ./ --ext .*"
   },
   "keywords": [],
   "author": "strong dan",

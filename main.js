@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 
 // 禁用当前应用程序的硬件加速, 注释此行会在vscode控制台启动硬件加速
 app.disableHardwareAcceleration();
@@ -24,8 +24,14 @@ const createWindow = () => {
 }
 
 // 主进程监听渲染进程传递过来的回调函数
-ipcMain.handle('render-info', (event, msg) => {
-    console.log(msg);
+ipcMain.handle('render-info', (event) => {
+    dialog.showOpenDialog({
+        title: '选择文件',
+        buttonLabel: 'ok',
+        properties: ['multiSelections']
+    }).then((res) => {
+        console.log(res);
+    })
 })
 
 // app.whenReady表示主进程加载完成，返回一个promise 
