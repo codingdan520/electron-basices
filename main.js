@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, desktopCapturer } = require('electron');
 
 // 禁用当前应用程序的硬件加速, 注释此行会在vscode控制台启动硬件加速
 app.disableHardwareAcceleration();
@@ -21,6 +21,13 @@ const createWindow = () => {
 
     // 打开devTool
     win.webContents.openDevTools();
+    // createDesktopCapturer(win);
+    ipcMain.handle('capturer-event', async () => {
+        // 返回一个捕获的数组对象
+        return desktopCapturer.getSources({ types: ['window', 'screen'] }).then(async sources => {
+            return sources
+        })
+    })
 }
 
 // 主进程监听渲染进程传递过来的回调函数
