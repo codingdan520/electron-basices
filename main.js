@@ -1,4 +1,6 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
+
+const menuBuilder = require('./menu.js');   
 
 // 禁用当前应用程序的硬件加速, 注释此行会在vscode控制台启动硬件加速
 app.disableHardwareAcceleration();
@@ -12,27 +14,32 @@ const createWindow = () => {
         height: 800,
         webPreferences: {
             // 渲染进程预加载
-            preload: path.resolve(__dirname, './preload.js')
+            preload: path.resolve(__dirname, './preload.js'),
+
         }
     })
-
     // 加载静态资源
     win.loadFile('index.html');
-
-    // 打开devTool
     win.webContents.openDevTools();
+    // 把主题菜单挂载到窗口
+    Menu.setApplicationMenu(menuBuilder);
+    win.webContents.on('context-menu', (e) => {
+        const contxtMenu = Menu.buildFromTemplate([
+            {
+                label: 'menu 1',
+                click: () => {
+                    e.sender.send('context-menu-command', 'menu-1')
+                }
+            },
+            {
+                type: 'separator'
+            },
+            { label: 'Menu Item 2', type: 'checkbox', checked: true }
+        ])
+        contxtMenu.popup();
+    })
 }
 
-// 主进程监听渲染进程传递过来的回调函数
-ipcMain.handle('render-info', (event) => {
-    dialog.showOpenDialog({
-        title: '选择文件',
-        buttonLabel: 'ok',
-        properties: ['multiSelections']
-    }).then((res) => {
-        console.log(res);
-    })
-})
 
 // app.whenReady表示主进程加载完成，返回一个promise 
 app.whenReady().then(() => {
